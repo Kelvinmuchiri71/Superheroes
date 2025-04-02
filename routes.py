@@ -9,7 +9,7 @@ from app import app
 @app.route('/heroes', methods=['GET'])
 def get_heroes():
     heroes = Hero.query.all()
-    return jsonify([hero.serialize(depth=1) for hero in heroes])
+    return jsonify([hero.serialize() for hero in heroes])
 
 @app.route('/heroes/<int:id>', methods=['GET'])
 def get_hero(id):
@@ -17,12 +17,12 @@ def get_hero(id):
     if not hero:
         return jsonify({"error": "Hero not found"}), 404
 
-    return jsonify(hero.serialize(depth=2))
+    return jsonify(hero.serialize())
 
 @app.route('/powers', methods=['GET'])
 def get_powers():
     powers = Power.query.all()
-    return jsonify([power.serialize(depth=1) for power in powers])
+    return jsonify([power.serialize() for power in powers])
 
 @app.route('/powers/<int:id>', methods=['GET'])
 def get_power(id):
@@ -30,7 +30,7 @@ def get_power(id):
     if not power:
         return jsonify({"error": "Power not found"}), 404
 
-    return jsonify(power.serialize(depth=2))
+    return jsonify(power.serialize())
 
 @app.route('/powers/<int:id>', methods=['PATCH'])
 def update_power(id):
@@ -45,7 +45,7 @@ def update_power(id):
         power.description = data["description"]
 
     db.session.commit()
-    return jsonify(power.serialize(depth=2))
+    return jsonify(power.serialize())
 
 @app.route('/hero_powers', methods=['POST'])
 def create_hero_power():
@@ -73,9 +73,9 @@ def create_hero_power():
     db.session.add(hero_power)
     db.session.commit()
 
-    return jsonify(hero_power.serialize(depth=2)), 201
+    return jsonify(hero_power.serialize()), 201
 
 @app.route('/hero_powers', methods=['GET'])
 def get_hero_powers():
     hero_powers = HeroPower.query.all()
-    return jsonify([hp.serialize(depth=1) for hp in hero_powers])
+    return jsonify([hp.serialize() for hp in hero_powers])
