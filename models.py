@@ -18,11 +18,8 @@ class Hero(db.Model):
             raise ValueError(f"{key} must be at least 3 characters long.")
         return value
 
-    def serialize(self, depth=1):
-        data = {"id": self.id, "name": self.name, "super_name": self.super_name}
-        if depth > 0:
-            data["hero_powers"] = [hp.serialize(depth=depth-1) for hp in self.hero_powers]
-        return data
+    def serialize(self):
+        return {"id": self.id, "name": self.name, "super_name": self.super_name}
     
 class Power(db.Model):
     __tablename__ = 'powers'
@@ -61,9 +58,10 @@ class HeroPower(db.Model):
             raise ValueError("Strength must be 'Strong', 'Weak', or 'Average'.")
         return value
 
-    def serialize(self, depth=1):
-        data = {"id": self.id, "strength": self.strength}
-        if depth > 0:
-            data["hero"] = self.hero.serialize(depth=depth-1)
-            data["power"] = self.power.serialize(depth=depth-1)
-        return data
+    def serialize(self):
+        return {
+            "id": self.id,
+            "strength": self.strength,
+            "hero": self.hero.serialize(),
+            "power": self.power.serialize()
+        }                                                   
