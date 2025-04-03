@@ -64,4 +64,4 @@ class HeroPower(db.Model):
             "strength": self.strength,
             "hero": self.hero.serialize(),
             "power": self.power.serialize()
-        }                                                   
+        }

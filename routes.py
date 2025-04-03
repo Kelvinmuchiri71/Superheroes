@@ -39,11 +39,15 @@ def update_power(id):
         return jsonify({"error": "Power not found"}), 404
 
     data = request.get_json()
-    if "description" in data:
-        if len(data["description"]) < 20:
-            return jsonify({"errors": ["Description must be at least 20 characters long"]}), 400
-        power.description = data["description"]
 
+    if not data or "description" not in data:
+        return jsonify({"errors": ["Description is required"]}), 400
+
+        
+    if len(data["description"]) < 20:
+        return jsonify({"errors": ["Description must be at least 20 characters long"]}), 400
+    
+    power.description = data["description"]
     db.session.commit()
     return jsonify(power.serialize())
 
